@@ -1,0 +1,100 @@
+<div class="p-8 max-w-2xl">
+    <div class="mb-8">
+      <a routerLink="/tareas"
+         class="text-[#206223] text-sm font-medium flex items-center gap-1 mb-4 hover:underline">
+        <span class="material-symbols-outlined text-base">arrow_back</span> Volver
+      </a>
+      <h2 style="font-family:'Manrope',sans-serif" class="text-4xl font-extrabold text-[#1a1c1a]">
+        Nueva Tarea
+      </h2>
+      <p class="text-[#40493d] mt-1">Programa una actividad agrícola.</p>
+    </div>
+  
+    <div *ngIf="error"
+         class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+      {{ error }}
+    </div>
+  
+    <div class="bg-white rounded-xl border border-[#e2e3df] p-8">
+      <form (ngSubmit)="guardar()" #f="ngForm" class="space-y-6">
+  
+        <div>
+          <label class="block text-xs font-bold text-[#40493d] uppercase tracking-wider mb-2">
+            Cultivo
+          </label>
+          <select [(ngModel)]="tarea.cultivo_id" name="cultivo_id" required
+                  class="w-full border border-[#bfcaba] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#206223] transition-all bg-white">
+            <option [value]="0">Seleccione un cultivo</option>
+            <option *ngFor="let c of cultivos" [value]="c.id">{{ c.nombre }}</option>
+          </select>
+        </div>
+  
+        <div>
+          <label class="block text-xs font-bold text-[#40493d] uppercase tracking-wider mb-3">
+            Tipo de Tarea
+          </label>
+          <div class="grid grid-cols-3 gap-3">
+            <label *ngFor="let tipo of tiposTarea"
+                   class="flex flex-col items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all"
+                   [ngClass]="tarea.tipo_tarea === tipo
+                     ? 'border-[#206223] bg-green-50'
+                     : 'border-[#e2e3df] hover:border-[#bfcaba]'">
+              <input type="radio" [(ngModel)]="tarea.tipo_tarea"
+                     [value]="tipo" name="tipo_tarea" class="sr-only" required/>
+              <span class="material-symbols-outlined text-xl mb-1"
+                    [ngClass]="tarea.tipo_tarea === tipo ? 'text-[#206223]' : 'text-stone-400'">
+                {{ tipo === 'Riego' ? 'water_drop' :
+                   tipo === 'Fertilización' ? 'science' :
+                   tipo === 'Fumigación' ? 'pest_control' :
+                   tipo === 'Inspección' ? 'search' :
+                   tipo === 'Cosecha' ? 'agriculture' : 'content_cut' }}
+              </span>
+              <span class="text-xs font-semibold text-center">{{ tipo }}</span>
+            </label>
+          </div>
+        </div>
+  
+        <div>
+          <label class="block text-xs font-bold text-[#40493d] uppercase tracking-wider mb-2">
+            Descripción
+          </label>
+          <textarea [(ngModel)]="tarea.descripcion" name="descripcion" rows="3"
+                    class="w-full border border-[#bfcaba] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#206223] transition-all resize-none"
+                    placeholder="Detalla las instrucciones de la tarea..."></textarea>
+        </div>
+  
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-[#40493d] uppercase tracking-wider mb-2">
+              Fecha Programada
+            </label>
+            <input [(ngModel)]="tarea.fecha_programada" name="fecha" type="date" required
+                   class="w-full border border-[#bfcaba] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#206223] transition-all"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-[#40493d] uppercase tracking-wider mb-2">
+              Estado Inicial
+            </label>
+            <select [(ngModel)]="tarea.estado" name="estado"
+                    class="w-full border border-[#bfcaba] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#206223] transition-all bg-white">
+              <option value="pendiente">Pendiente</option>
+              <option value="en proceso">En Proceso</option>
+              <option value="completada">Completada</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="flex justify-end gap-4 pt-4">
+          <a routerLink="/tareas"
+             class="px-6 py-3 text-stone-500 font-semibold hover:bg-stone-50 rounded-xl transition-all text-sm">
+            Cancelar
+          </a>
+          <button type="submit" [disabled]="loading || f.invalid"
+                  class="bg-[#206223] text-white px-8 py-3 rounded-xl font-bold hover:opacity-90 transition-all disabled:opacity-50 text-sm flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">save</span>
+            {{ loading ? 'Guardando...' : 'Guardar Tarea' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>

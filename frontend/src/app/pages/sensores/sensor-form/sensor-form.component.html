@@ -1,0 +1,52 @@
+<div class="p-8 max-w-2xl">
+    <div class="mb-8">
+      <a routerLink="/sensores" class="text-[#206223] text-sm font-medium flex items-center gap-1 mb-4 hover:underline">
+        <span class="material-symbols-outlined text-base">arrow_back</span> Volver
+      </a>
+      <h2 style="font-family:'Manrope',sans-serif" class="text-4xl font-extrabold text-[#1a1c1a]">Nuevo Sensor</h2>
+    </div>
+  
+    <div *ngIf="error" class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{{ error }}</div>
+  
+    <div class="bg-white rounded-xl border border-[#e2e3df] p-8">
+      <form (ngSubmit)="guardar()" #f="ngForm" class="space-y-6">
+        <div>
+          <label class="block text-xs font-bold text-[#40493d] uppercase tracking-wider mb-2">Tipo de Sensor</label>
+          <div class="grid grid-cols-3 gap-4">
+            <label *ngFor="let tipo of ['humedad','temperatura','pH']"
+                   class="flex flex-col items-center justify-center p-4 rounded-xl border-2 cursor-pointer transition-all"
+                   [ngClass]="sensor.tipo_sensor === tipo ? 'border-[#206223] bg-green-50' : 'border-[#e2e3df] hover:border-[#bfcaba]'">
+              <input type="radio" [(ngModel)]="sensor.tipo_sensor" [value]="tipo" name="tipo_sensor" class="sr-only"/>
+              <span class="material-symbols-outlined text-2xl mb-1"
+                    [ngClass]="sensor.tipo_sensor === tipo ? 'text-[#206223]' : 'text-stone-400'">
+                {{ tipo === 'humedad' ? 'water_drop' : tipo === 'temperatura' ? 'thermostat' : 'science' }}
+              </span>
+              <span class="text-sm font-semibold capitalize">{{ tipo }}</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#40493d] uppercase tracking-wider mb-2">Cultivo Asociado</label>
+          <select [(ngModel)]="sensor.cultivo_id" name="cultivo_id" required
+                  class="w-full border border-[#bfcaba] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#206223] transition-all bg-white">
+            <option value="0">Seleccione un cultivo</option>
+            <option *ngFor="let c of cultivos" [value]="c.id">{{ c.nombre }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#40493d] uppercase tracking-wider mb-2">Ubicación</label>
+          <input [(ngModel)]="sensor.ubicacion" name="ubicacion"
+                 class="w-full border border-[#bfcaba] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#206223] transition-all"
+                 placeholder="Ej: Sector Norte - Lote B4"/>
+        </div>
+        <div class="flex justify-end gap-4 pt-4">
+          <a routerLink="/sensores" class="px-6 py-3 text-stone-500 font-semibold hover:bg-stone-50 rounded-xl transition-all text-sm">Cancelar</a>
+          <button type="submit" [disabled]="loading || f.invalid"
+                  class="bg-[#206223] text-white px-8 py-3 rounded-xl font-bold hover:opacity-90 transition-all disabled:opacity-50 text-sm flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">save</span>
+            {{ loading ? 'Guardando...' : 'Guardar Sensor' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>

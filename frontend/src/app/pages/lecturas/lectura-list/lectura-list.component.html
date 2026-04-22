@@ -1,0 +1,61 @@
+<div class="p-8">
+    <div class="flex justify-between items-end mb-8">
+      <div>
+        <h2 style="font-family:'Manrope',sans-serif" class="text-4xl font-extrabold text-[#1a1c1a]">Lecturas</h2>
+        <p class="text-[#40493d] mt-1">Historial de mediciones de todos los sensores.</p>
+      </div>
+      <a routerLink="/lecturas/nueva"
+         class="bg-[#206223] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:opacity-90 transition-all text-sm">
+        <span class="material-symbols-outlined">add</span> Nueva Lectura
+      </a>
+    </div>
+  
+    <div *ngIf="mensaje" class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl text-sm font-medium">
+      {{ mensaje }}
+    </div>
+  
+    <div *ngIf="loading" class="text-center py-20 text-stone-400">
+      <p>Cargando lecturas...</p>
+    </div>
+  
+    <div *ngIf="!loading" class="bg-white rounded-xl border border-[#e2e3df] overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-[#f4f4f0] text-[#40493d] text-xs uppercase tracking-wider">
+            <th class="px-6 py-4 text-left">ID</th>
+            <th class="px-6 py-4 text-left">Sensor</th>
+            <th class="px-6 py-4 text-left">Ubicación</th>
+            <th class="px-6 py-4 text-left">Valor</th>
+            <th class="px-6 py-4 text-left">Fecha/Hora</th>
+            <th class="px-6 py-4 text-left">Estado</th>
+            <th class="px-6 py-4 text-left">Acción</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#f4f4f0]">
+          <tr *ngFor="let l of lecturas" class="hover:bg-[#faf9f5] transition-colors">
+            <td class="px-6 py-4 text-stone-400 font-mono text-xs">#{{ l.id }}</td>
+            <td class="px-6 py-4 font-semibold capitalize">{{ l.tipo_sensor }}</td>
+            <td class="px-6 py-4 text-[#40493d]">{{ l.ubicacion || '—' }}</td>
+            <td class="px-6 py-4 font-bold text-[#206223]">{{ l.valor }}</td>
+            <td class="px-6 py-4 text-stone-400 text-xs">{{ l.fecha_hora | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td class="px-6 py-4">
+              <span class="px-2 py-1 rounded-full text-xs font-bold" [ngClass]="alertaClass(l.estado_alerta)">
+                {{ l.estado_alerta }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <button (click)="eliminar(l.id)" class="p-2 text-[#ba1a1a] hover:bg-red-50 rounded-lg transition-all">
+                <span class="material-symbols-outlined text-lg">delete</span>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="lecturas.length === 0">
+            <td colspan="7" class="px-6 py-16 text-center text-stone-400">
+              <span class="material-symbols-outlined text-4xl block mb-2">monitoring</span>
+              No hay lecturas registradas.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
